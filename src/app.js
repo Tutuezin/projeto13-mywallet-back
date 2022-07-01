@@ -2,15 +2,16 @@ import express from "express";
 import cors from "cors";
 import chalk from "chalk";
 import dotenv from "dotenv";
-import { signIn } from "./controllers/auth/signIn.js";
+import authRouter from "./routes/authRouter.js";
 
 //CONFIGS
 dotenv.config();
 const server = express();
 server.use([cors(), express.json()]);
 
-server.post("/sign-in", signIn);
+server.use(authRouter);
 
-server.listen(5000, () => {
+const PORT = process.env.PORT;
+server.listen(PORT || 5000, () => {
   console.log(chalk.bold.green("Server rodando..."));
 });
