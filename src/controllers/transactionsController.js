@@ -8,7 +8,7 @@ export async function home(req, res) {
 
     const transactions = await db
       .collection("transactions")
-      .find({ userId: session.userId })
+      .find({ userId: session.userId }) // usar new ObjectId se precisar
       .toArray();
 
     res.send(transactions);
