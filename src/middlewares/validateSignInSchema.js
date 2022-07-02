@@ -9,7 +9,7 @@ async function validateSignInSchema(req, res, next) {
 
   if (error) {
     const messageError = error.details.map((item) => item.message);
-    return res.send(messageError).status(422);
+    return res.status(422).send(messageError);
   }
   next();
 }

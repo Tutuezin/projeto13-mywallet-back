@@ -31,14 +31,16 @@ export async function signIn(req, res) {
 
     if (user && bcrypt.compareSync(password, user.password)) {
       const token = uuid();
+      const name = user.name;
 
       await db.collection("sessions").insertOne({
         userId: user._id,
         token,
+        name,
       });
-      res.send("Usuário logado!").send(200);
+      res.status(200).send({ token });
     } else {
-      res.send("Email ou senha incorretos!").status(401);
+      res.status(401).send("Email ou senha incorretos!");
     }
   } catch (error) {
     console.error(error);
