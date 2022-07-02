@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
 import { db } from "../database/db.js";
-import { ObjectId } from "mongodb";
 
 export async function signUp(req, res) {
   try {
@@ -16,7 +15,6 @@ export async function signUp(req, res) {
     await db.collection("users").insertOne({
       ...user,
       password: passwordHash,
-      confirmPassword: passwordHash,
     });
     res.sendStatus(200);
   } catch (error) {
