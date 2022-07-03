@@ -1,6 +1,5 @@
 import { db } from "../database/db.js";
 import dayjs from "dayjs";
-import { ObjectId } from "mongodb";
 
 export async function home(req, res) {
   try {
@@ -11,7 +10,9 @@ export async function home(req, res) {
       .find({ userId: session.userId }) // usar new ObjectId se precisar
       .toArray();
 
-    res.send(transactions);
+    const user = await db.collection("users").findOne({ _id: session.userId });
+
+    res.send({ transactions, user });
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
@@ -24,11 +25,26 @@ export async function transaction(req, res) {
     const transaction = req.body;
     transaction.date = dayjs().format("DD/MM");
 
+    const user = await db.collection("users").findOne({ _id: session.userId });
+    let newBalance;
+
+    if (transaction.type === "deposit") {
+      newBalance = Number(user.balance) + Number(transaction.amount);
+    } else {
+      newBalance = Number(user.balance) - Number(transaction.amount);
+    }
+    await db.collection("users").updateOne(
+      {
+        _id: user._id,
+      },
+      { $set: { balance: newBalance } }
+    );
+
     await db
       .collection("transactions")
       .insertOne({ ...transaction, userId: session.userId });
 
-    res.status(201).send("Transação realizada!");
+    res.status(201).send({ newBalance });
   } catch (error) {
     console.error(error);
     res.sendStatus(500);

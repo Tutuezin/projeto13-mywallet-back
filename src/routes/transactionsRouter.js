@@ -1,6 +1,5 @@
 import { Router } from "express";
-import { transaction } from "../controllers/transactionsController.js";
-import { home } from "../controllers/transactionsController.js";
+import { transaction, home } from "../controllers/transactionsController.js";
 import validateToken from "../middlewares/validateToken.js";
 import validateTransactionSchema from "../middlewares/validateTransactionSchema.js";
 

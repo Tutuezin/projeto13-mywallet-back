@@ -5,7 +5,6 @@ import { db } from "../database/db.js";
 export async function signUp(req, res) {
   try {
     const user = req.body;
-    const token = uuid();
 
     // Caso tudo esteja validado vamos criptografar os dados antes
     // de entrar no banco de dados.
@@ -15,6 +14,7 @@ export async function signUp(req, res) {
     await db.collection("users").insertOne({
       ...user,
       password: passwordHash,
+      balance: 0,
     });
     res.sendStatus(200);
   } catch (error) {
