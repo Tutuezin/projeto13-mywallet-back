@@ -36,9 +36,8 @@ export async function signIn(req, res) {
       await db.collection("sessions").insertOne({
         userId: user._id,
         token,
-        name,
       });
-      res.status(200).send({ token });
+      res.status(200).send({ token, name });
     } else {
       res.status(401).send("Email ou senha incorretos!");
     }

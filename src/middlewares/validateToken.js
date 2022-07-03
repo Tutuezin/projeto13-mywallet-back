@@ -10,7 +10,7 @@ async function validateToken(req, res, next) {
   res.locals.session = session;
 
   if (!session) {
-    return res.sendStatus(401);
+    return res.status(401).send("Token Inválido!");
   }
 
   next();
